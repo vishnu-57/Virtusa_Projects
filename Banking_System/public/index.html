@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Bank | Modern Banking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="notification" class="notification hidden"></div>
+
+    <div id="auth-section" class="container">
+        <div class="glass-panel">
+            <h1 class="logo">Nexus Bank</h1>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Login</button>
+                <button class="tab" onclick="switchTab('register')">Register</button>
+            </div>
+            
+            <form id="login-form" class="auth-form active" onsubmit="login(event)">
+                <input type="text" id="login-username" placeholder="Username" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit" class="btn primary-btn">Login to Account</button>
+            </form>
+            
+            <form id="register-form" class="auth-form" onsubmit="register(event)">
+                <input type="text" id="reg-username" placeholder="Username" required>
+                <input type="password" id="reg-password" placeholder="Password" required>
+                <select id="reg-type">
+                    <option value="SAVINGS">Savings Account (Min 500)</option>
+                    <option value="CURRENT">Current Account (Overdraft 5000)</option>
+                </select>
+                <input type="number" id="reg-deposit" placeholder="Initial Deposit Amount" min="0" required>
+                <button type="submit" class="btn primary-btn">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard-section" class="container hidden">
+        <header class="dashboard-header">
+            <div>
+                <h2>Welcome, <span id="user-display"></span></h2>
+                <p>Account No: <span id="acc-no-display"></span> | <span id="acc-type-display" class="badge"></span></p>
+            </div>
+            <button class="btn logout-btn" onclick="logout()">Logout</button>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="glass-panel balance-card">
+                <h3>Total Balance</h3>
+                <h1 id="balance-display">$0.00</h1>
+            </div>
+
+            <div class="glass-panel action-card">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="btn action-btn" onclick="showModal('deposit-modal')">Deposit</button>
+                    <button class="btn action-btn" onclick="showModal('withdraw-modal')">Withdraw</button>
+                    <button class="btn action-btn" onclick="showModal('transfer-modal')">Transfer</button>
+                </div>
+            </div>
+
+            <div class="glass-panel history-card span-2">
+                <h3>Recent Transactions</h3>
+                <div class="table-container">
+                    <table id="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-body">
+                            <!-- Transactions will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="deposit-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <span class="close" onclick="closeModal('deposit-modal')">&times;</span>
+            <form onsubmit="handleTransaction(event, 'DEPOSIT', 'deposit-amount')">
+                <h3>Deposit Money</h3>
+                <input type="number" id="deposit-amount" placeholder="Amount" step="0.01" min="0.01" required>
+                <button type="submit" class="btn primary-btn">Confirm Deposit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="withdraw-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <span class="close" onclick="closeModal('withdraw-modal')">&times;</span>
+            <form onsubmit="handleTransaction(event, 'WITHDRAW', 'withdraw-amount')">
+                <h3>Withdraw Money</h3>
+                <input type="number" id="withdraw-amount" placeholder="Amount" step="0.01" min="0.01" required>
+                <button type="submit" class="btn primary-btn">Confirm Withdraw</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="transfer-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <span class="close" onclick="closeModal('transfer-modal')">&times;</span>
+            <form onsubmit="handleTransfer(event)">
+                <h3>Transfer Funds</h3>
+                <input type="text" id="transfer-target" placeholder="Recipient Account No" required>
+                <input type="number" id="transfer-amount" placeholder="Amount" step="0.01" min="0.01" required>
+                <button type="submit" class="btn primary-btn">Transfer Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
